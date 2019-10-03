@@ -1,0 +1,74 @@
+despmtr big_dia 400
+despmtr small_teeth 14
+despmtr gear_ratio 2
+despmtr engagement_width 50
+despmtr number_of_teeth_of_overlap 1
+despmtr pressure_angle 20
+
+set big_teeth small_teeth*gear_ratio
+set small_dia big_dia/gear_ratio
+
+set r_big big_dia/2 
+set r_small small_dia/2
+
+set loa_len hypot(r_big,r_small) # line of action length
+
+set spiral_amount_big -loa_len/(engagement_width*big_teeth)
+set spiral_amount_small spiral_amount_big*(-gear_ratio)
+
+set cone_angle_big atan(gear_ratio)
+set cone_angle_small atan(1/gear_ratio)
+
+set pi 3.14159265358979323846264338327950
+
+### Make the big gear
+set module big_dia/big_teeth
+set r_base r_big*cosd(pressure_angle)
+set r_add r_base+module
+
+# involute and tooth top
+skbeg 0 0 0 0
+	set theta_add sqrt(r_add^2-r_base^2)/r_base
+	set n_involute_segments 20
+	patbeg i n_involute_segments
+		set theta 0+theta_add*(i-1)/(n_involute_segments-1)
+		linseg r_base*(cos(theta)+theta*sin(theta)) r_base*(sin(theta)-theta*cos(theta)) 0
+	patend
+	set phi_start atan2d((sin(theta)-theta*cos(theta)),(cos(theta)+theta*sin(theta)))
+	set phi_end (90/big_teeth)+tand(pressure_angle)-(pi/180*pressure_angle)
+	cirarc r_add*cosd((phi_start+phi_end)/2) r_add*sind((phi_start+phi_end)/2) 0 r_add*cosd(phi_end) r_add*sind(phi_end) 0
+	linseg 0 0 0
+skend
+
+# tooth bottom (troochoidal?)
+skbeg 0 0 0 0
+	linseg r_base 0 0
+	set phi_start 0
+	set phi_end -(360/big_teeth-((90/big_teeth)+tand(pressure_angle)-(pi/180*pressure_angle)))
+	cirarc r_base*cosd((phi_start+phi_end)/2) r_base*sind((phi_start+phi_end)/2) 0 r_base*cosd(phi_end) r_base*sind(phi_end) 0
+skend
+
+
+# rotatez -phi_end 0 0
+
+# store tooth_half 0 1
+# mirror -sind(phi_end) cosd(phi_end) 0
+# restore tooth_half
+# join
+
+# skbeg 0 0 0 0
+# 	set R 0.5*big_teeth*module
+# 	set Qx -1.25*module
+# 	set Qy 0.25*pi*module-1.25*module*tand(pressure_angle)
+
+# 	set t0 -(0.25*pi-1.25*tand(pressure_angle))/(0.5*big_teeth)
+# 	set t_max 1
+# 	set n_trochoidal_segments 30
+# 	patbeg i n_trochoidal_segments
+# 		set t t0+(t_max-t0)*(i-1)/(n_trochoidal_segments-1)
+# 		set x_t (R+Qx)*cos(t)+(R*t+Qy)*sin(t)
+# 		set y_t -(R+Qx)*sin(t)+(R*t+Qy)*cos(t)
+# 		linseg x_t y_t 0
+# 	patend
+# 	linseg 0 0 0
+# skend
