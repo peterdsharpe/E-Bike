@@ -42,16 +42,16 @@ eff = np.array([
     for gear_ratio in gear_ratios
 ])
 
-plt.plot(gear_ratios, eff)
+plt.plot(gear_ratios, eff * 100)
 plt.xlim(gear_ratios[0], gear_ratios[-1])
-plt.ylim(0, 1)
+plt.ylim(0, 100)
 # plt.xscale('log')
 set_ticks(
     x_major=0.1, x_minor=0.025,
-    y_major=0.1, y_minor=0.025
+    y_major=10, y_minor=2.5
 )
 show_plot(
-    "Electric Bike: Gear Ratios",
+    f"Electric Bike: Gear Ratios at {speed * 2.24:.0f} mph",
     xlabel="Gear Ratio",
-    ylabel="Efficiency"
+    ylabel=f"Efficiency [%]"
 )
