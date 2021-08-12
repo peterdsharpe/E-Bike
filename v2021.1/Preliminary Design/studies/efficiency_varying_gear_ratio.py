@@ -8,7 +8,7 @@ import aerosandbox.numpy as np
 from aerosandbox.tools.pretty_plots import plt, show_plot, set_ticks
 from scipy import optimize
 
-speed = 15 / 2.24
+speed = 24 / 2.24
 
 fig, ax = plt.subplots()
 t = np.linspace(0, 10, 500)
@@ -22,17 +22,15 @@ gear_ratios = np.geomspace(
 
 def get_efficiency(gear_ratio):
     bike = Bike(gear_ratio=gear_ratio)
-
-    throttle = optimize.minimize(
-        fun=lambda x: (bike.performance(speed=speed, throttle_state=x)['net acceleration']) ** 2,
-        x0=np.array([1]),
-        bounds=[(0, 1)],
-    ).x
-
-    perf = bike.performance(speed=speed, throttle_state=throttle)
+    try:
+        perf = bike.steady_state_performance(
+            speed=speed
+        )
+    except ValueError:
+        return np.NaN
 
     if np.abs(perf['net acceleration']) <= 1e-6:
-        return perf['efficiency']
+        return perf['motor state']['efficiency']
     else:
         return np.NaN
 
