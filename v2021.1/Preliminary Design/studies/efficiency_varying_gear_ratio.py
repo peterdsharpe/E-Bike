@@ -29,10 +29,7 @@ def get_efficiency(gear_ratio):
     except ValueError:
         return np.NaN
 
-    if np.abs(perf['net acceleration']) <= 1e-6:
-        return perf['motor state']['efficiency']
-    else:
-        return np.NaN
+    return perf['motor state']['efficiency']
 
 
 eff = np.array([

@@ -152,9 +152,17 @@ class Bike:
                 )['net acceleration']
             ) ** 2,
             x0=np.array([0.5]),
+            bounds=[
+                (0, 1)
+            ]
         ).x
 
-        perf = self.performance(speed=speed, throttle_state=throttle)
+        perf = self.performance(
+            speed=speed,
+            throttle_state=throttle,
+            grade=grade,
+            headwind=headwind,
+        )
 
         if throttle > 1 or throttle < 0 or np.abs(perf['net acceleration']) >= 1e-6:
             raise ValueError("Could not satisfy zero-net-acceleration condition!")
