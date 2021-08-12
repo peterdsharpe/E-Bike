@@ -8,7 +8,7 @@ import aerosandbox.numpy as np
 from aerosandbox.tools.pretty_plots import plt, show_plot, set_ticks
 from scipy import optimize
 
-speed = 20 / 2.24
+speed = 15 / 2.24
 
 fig, ax = plt.subplots()
 t = np.linspace(0, 10, 500)
@@ -42,14 +42,16 @@ eff = np.array([
     for gear_ratio in gear_ratios
 ])
 
-plt.plot(gear_ratios / 0.700 * 1e3, eff)
+plt.plot(gear_ratios, eff)
+plt.xlim(gear_ratios[0], gear_ratios[-1])
 plt.ylim(0, 1)
+# plt.xscale('log')
 set_ticks(
-    x_major=100, x_minor=25,
+    x_major=0.1, x_minor=0.025,
     y_major=0.1, y_minor=0.025
 )
 show_plot(
     "Electric Bike: Gear Ratios",
-    xlabel="Small Gear Diameter [mm]",
+    xlabel="Gear Ratio",
     ylabel="Efficiency"
 )
