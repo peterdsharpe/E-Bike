@@ -21,7 +21,7 @@ colors = plt.cm.get_cmap('rainbow')(np.linspace(0, 1, len(gear_ratios)))
 for i, gear_ratio in enumerate(gear_ratios):
     pos, vel = Bike(gear_ratio=gear_ratio).simulate(t)
     plt.plot(t, vel * 2.24,
-             label=f"{gear_ratio * 0.700 * 1e3:.0f}",
+             label=f"{gear_ratio:.2f}",
              color=colors[i],
              )
 set_ticks(1, 0.5, 5, 1)
