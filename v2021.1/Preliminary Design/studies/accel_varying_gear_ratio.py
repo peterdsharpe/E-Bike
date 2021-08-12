@@ -24,7 +24,7 @@ for i, gear_ratio in enumerate(gear_ratios):
              label=f"{gear_ratio * 0.700 * 1e3:.0f}",
              color=colors[i],
              )
-set_ticks(2, 1, 4, 2)
+set_ticks(1, 0.5, 5, 1)
 show_plot(
     "Electric Bike: Gear Ratios",
     xlabel="Time [s]",
